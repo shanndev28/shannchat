@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Chat dengan pengguna 1</title>
+
+    <link rel="shortcut icon" href="https://cryptologos.cc/logos/chatcoin-chat-logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        body {
+            color: #DCF8C6;
+            background-color: #075E54;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 600;
+            margin: 0 !important;
+        }
+
+        .navbar .container {
+            justify-content: start;
+        }
+
+        .card {
+            width: auto;
+            flex: 0 0 auto;
+            max-width: 70%;
+        }
+
+        .form-control {
+            width: 95%;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" style="z-index: 999 !important;">
+        <div class="container py-2">
+            <img src="https://cdn-icons-png.flaticon.com/128/2202/2202112.png" alt="Profile" width="50px">
+            <div class="d-block m-0 ms-3" style="color: black;">
+                <h6 class="m-0 p-0" href="#">Pengguna 1</h6>
+                <small class="m-0 p-0" href="#">Online</small>
+            </div>
+        </div>
+    </nav>
+    <div class="container py-5 my-5">
+        <div class="row" id="content"></div>
+    </div>
+    <div class="fixed-bottom pb-3">
+        <div class="container d-flex justify-content-center gap-3">
+            <div class="input-group mb-3">
+                <textarea type="text" class="form-control" rows="2" placeholder="Ketik Pesan" id="message"></textarea>
+                <button class="btn btn-danger" type="button" id="kirim">
+                    Kirim
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let socket = io()
+
+        socket.on('broadcast-1', msg => {
+            $("#content").append(`
+                <div class="d-flex justify-content-start">
+                    <div class="card m-2">
+                        <div class="card-body">`+ msg.replace(/\n/g, '<br />') + `</div>
+                    </div>
+                </div>
+            `)
+        })
+
+        $("#kirim").click(() => {
+            let message = $("#message").val()
+            if (!message) return false
+
+            socket.emit('message-2', message)
+
+            $("#content").append(`
+                <div class="d-flex justify-content-end">
+                    <div class="card m-2">
+                        <div class="card-body">`+ message.replace(/\n/g, '<br />') + `</div>
+                    </div>
+                </div>
+            `)
+
+            $("#message").val("")
+        })
+    </script>
+</body>
+
+</html>
